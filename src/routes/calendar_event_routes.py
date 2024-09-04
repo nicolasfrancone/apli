@@ -2,26 +2,26 @@ from flask import Blueprint, request, jsonify
 
 event_bp = Blueprint('event_bp', __name__)
 
-# Variable global para almacenar el último event_id recibido
+# Global variable to store the last received event_id
 event_data = {
     "event_id": None
 }
 
-@event_bp.route('/api/receiveEventId', methods=['POST'])
-def receive_event_id():
-    if request.is_json:  # Verifica si el contenido es JSON
-        data = request.get_json()  # Obtén el contenido JSON del request
-        event_data['event_id'] = data.get('event_id')  # Guarda el event_id
+@event_bp.route('/api/<profile_id>/receiveEventId', methods=['POST'])
+def receive_event_id(profile_id):
+    if request.is_json:  # Check if the content is JSON
+        data = request.get_json()  # Get the JSON content from the request
+        event_data['event_id'] = data.get('event_id')  # Store the event_id
 
-        # Aquí puedes procesar el 'event_id' como lo necesites
-        print(f'Recibido event_id: {event_data["event_id"]}')
-        return jsonify({"message": "Event ID recibido correctamente", "event_id": event_data["event_id"]}), 200
+        # Here you can process the 'event_id' as needed
+        print(f'Received event_id: {event_data["event_id"]}')
+        return jsonify({"message": "Event ID received successfully", "event_id": event_data["event_id"]}), 200
     else:
         return jsonify({"error": "Invalid JSON format"}), 400
 
-@event_bp.route('/api/getEventId', methods=['GET'])
-def get_event_id():
-    if event_data["event_id"] is not None:  # Verifica si hay un event_id almacenado
+@event_bp.route('/api/<profile_id>/getEventId', methods=['GET'])
+def get_event_id(profile_id):
+    if event_data["event_id"] is not None:  # Check if there is a stored event_id
         return jsonify({"event_id": event_data["event_id"]}), 200
     else:
         return jsonify({"error": "No event ID available"}), 404
