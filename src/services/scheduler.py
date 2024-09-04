@@ -126,4 +126,10 @@ class Scheduler:
             current_time += timedelta(minutes=self.sheet_interval)
 
 
-scheduler = Scheduler()
+# Diccionario para almacenar las instancias del Scheduler por profile_id
+schedulers = {}
+
+def get_scheduler(profile_id):
+    if profile_id not in schedulers:
+        schedulers[profile_id] = Scheduler()
+    return schedulers[profile_id]

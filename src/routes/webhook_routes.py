@@ -1,10 +1,11 @@
 from flask import Blueprint, request, jsonify
-from src.services.scheduler import scheduler
+from src.services.scheduler import get_scheduler
 
 webhook_bp = Blueprint('webhook_bp', __name__)
 
 @webhook_bp.route('/api/<profile_id>/receiveWebhookData', methods=['POST'])
 def receive_webhook_data(profile_id):
+    scheduler = get_scheduler(profile_id)  # Obtener la instancia específica del Scheduler para el profile_id
     if request.is_json:
         data = request.get_json()
         scheduler.update_calendar_data(data)

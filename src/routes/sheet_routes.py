@@ -1,10 +1,11 @@
 from flask import Blueprint, request, jsonify
-from src.services.scheduler import scheduler
+from src.services.scheduler import get_scheduler  # Importar get_scheduler
 
 sheet_bp = Blueprint('sheet_bp', __name__)
 
 @sheet_bp.route('/api/<profile_id>/receiveSheetData', methods=['POST'])
 def receive_sheet_data(profile_id):
+    scheduler = get_scheduler(profile_id)  # Obtener la instancia específica del Scheduler para el profile_id
     if request.is_json:
         data = request.get_json()
         scheduler.update_sheet_data(data)
@@ -17,6 +18,7 @@ def receive_sheet_data(profile_id):
 
 @sheet_bp.route('/api/<profile_id>/getSheetData', methods=['GET'])
 def get_sheet_data(profile_id):
+    scheduler = get_scheduler(profile_id)  # Obtener la instancia específica del Scheduler para el profile_id
     if scheduler.sheet_data:
         return jsonify(scheduler.sheet_data), 200
     else:
